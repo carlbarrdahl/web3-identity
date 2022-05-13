@@ -1,53 +1,5 @@
-/*
-TODO:
-- Add ReentrancyGuard
-- Add Initializer
-- Add SafeTransfer
-- Add Deployer / Factory / Registry
-    - deploy
-    - emitERC721Transfered
-    - emitERC20Approved
-    - emitERC20Transfered
-- Write tests
-    - initialize
-        - assert owners.length == equities.length
-        - verify owners & equities are set
-    - transfer ETH ?
-        - verify tokens received
-        - fallback function
-    - add acceptedToken
-        - assert token is not already added?
-    - transfer Token ?
-        - verify tokens exist in contract
-    - transfer NFT
-        - verified transfered
-        - verify added to storage for later retreival
-        - event emitted
-    - has NFT
-        - verify list of NFTs matching are returned
-    - withdraw
-        - verify nonReentrant?
-        - verify correct equities sent
-        - verify ETH transfered
-        - verify all tokens transferd
-        - verify added
-    - disintegrate
-        - selfdestruct? What if tokens exist in contract that are not in acceptedERC20s?
-        - verify NFTs returned to their owners
-- Frontend
-    - UI for creating new Identity
-        - Owners + Equity inputs
-        - Add AcceptedERC20
-        - Transfer ETH
-        - Transfer tokens
-        - Approve and transfer NFT
-        - Input to check hasNFT
-        - Withdraw button
-        - Disintegrate button
-        - Event log
-
-Is it possible to see all tokens in contract?
-*/
+pragma solidity >=0.8.0 <0.9.0;
+//SPDX-License-Identifier: MIT
 
 import "hardhat/console.sol";
 
@@ -63,7 +15,7 @@ contract Identity is IERC721Receiver, ReentrancyGuard, Initializable {
     uint256[] private s_equities;
     address[] private s_acceptedERC20s;
 
-    StoredNFT[] public nfts;
+    StoredNFT[] private s_nfts;
 
     struct StoredNFT {
         address collection;
@@ -122,6 +74,10 @@ contract Identity is IERC721Receiver, ReentrancyGuard, Initializable {
         return s_acceptedERC20s;
     }
 
+    function nfts() public view returns (StoredNFT[] memory) {
+        return s_nfts;
+    }
+
     receive() external payable {}
 
     fallback() external payable {}
@@ -140,7 +96,7 @@ contract Identity is IERC721Receiver, ReentrancyGuard, Initializable {
             _tokenId,
             msg.data
         );
-        nfts.push(
+        s_nfts.push(
             StoredNFT(_collection, _tokenId, block.timestamp, msg.sender)
         );
 
@@ -157,7 +113,7 @@ contract Identity is IERC721Receiver, ReentrancyGuard, Initializable {
         view
         returns (uint256 tokenId, uint256 since)
     {
-        StoredNFT[] memory _nfts = nfts;
+        StoredNFT[] memory _nfts = nfts();
 
         for (uint256 i = 0; i < _nfts.length; i++) {
             if (_nfts[i].collection == _collection) {
@@ -235,7 +191,7 @@ contract Identity is IERC721Receiver, ReentrancyGuard, Initializable {
 
     function _disintegrateFinalize() internal {
         // Return all NFTs to their owners
-        StoredNFT[] memory _nfts = nfts;
+        StoredNFT[] memory _nfts = nfts();
         for (uint256 i = 0; i < _nfts.length; i++) {
             IERC721(_nfts[i].collection).safeTransferFrom(
                 address(this),
@@ -243,11 +199,14 @@ contract Identity is IERC721Receiver, ReentrancyGuard, Initializable {
                 _nfts[i].tokenId
             );
         }
+        delete s_nfts;
     }
 
     modifier onlyOwners() {
         address[] memory _owners = owners();
         bool isOwner = false;
+
+        console.log("onlyOwners", msg.sender);
 
         for (uint256 i = 0; i < _owners.length; i++) {
             if (_owners[i] == msg.sender) {

@@ -4,34 +4,6 @@ const { solidity } = require("ethereum-waffle");
 
 use(solidity);
 
-/*
-
-- initialize
-    - assert owners.length == equities.length
-    - verify owners & equities are set
-- transfer ETH ?
-    - verify tokens received
-    - fallback function
-- add acceptedToken
-    - assert token is not already added?
-- transfer Token ?
-    - verify tokens exist in contract
-- transfer NFT
-    - verified transfered
-    - verify added to storage for later retreival
-    - event emitted
-- has NFT
-    - verify list of NFTs matching are returned
-- withdraw
-    - verify nonReentrant?
-    - verify correct equities sent
-    - verify ETH transfered
-    - verify all tokens transferd
-    - verify added
-- disintegrate
-    - selfdestruct? What if tokens exist in contract that are not in acceptedERC20s?
-    - verify NFTs returned to their owners
-*/
 describe("Identity", function () {
   let identity;
   let tokenA;
@@ -240,6 +212,7 @@ describe("Identity", function () {
         "Disintegrate"
       );
       expect(await nft.balanceOf(owner.address)).to.equal(1);
+      expect((await identity.nfts()).length).to.equal(0);
     });
 
     it("should only be called by owners", async () => {
