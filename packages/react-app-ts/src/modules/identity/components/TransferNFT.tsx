@@ -50,10 +50,13 @@ export default function TransferNFT({ address }: { address: string }) {
           placeholder="Select NFT to transfer"
           value={selected}
           onChange={(e) => select(e.value)}
-          options={data.map((nft) => ({
-            label: nft.title,
-            value: `${nft.address}:${nft.id}`,
-          }))}
+          options={
+            // @ts-ignore
+            data.map((nft) => ({
+              label: nft.title,
+              value: `${nft.address}:${nft.id}`,
+            }))
+          }
         />
       </Box>
       {selected ? (
