@@ -2,6 +2,7 @@ require("dotenv").config();
 const { utils } = require("ethers");
 const fs = require("fs");
 const chalk = require("chalk");
+const path = require("path");
 
 require("@nomiclabs/hardhat-waffle");
 require("@tenderly/hardhat-tenderly");
@@ -231,33 +232,33 @@ module.exports = {
       },
     },
     moonbeam: {
-      url: 'https://rpc.api.moonbeam.network',
+      url: "https://rpc.api.moonbeam.network",
       chainId: 1284,
       accounts: {
         mnemonic: mnemonic(),
       },
     },
     moonriver: {
-      url: 'https://rpc.api.moonriver.moonbeam.network',
+      url: "https://rpc.api.moonriver.moonbeam.network",
       chainId: 1285,
       accounts: {
         mnemonic: mnemonic(),
       },
     },
     moonbaseAlpha: {
-      url: 'https://rpc.api.moonbase.moonbeam.network',
+      url: "https://rpc.api.moonbase.moonbeam.network",
       chainId: 1287,
       accounts: {
         mnemonic: mnemonic(),
       },
     },
     moonbeamDevNode: {
-      url: 'http://127.0.0.1:9933',
+      url: "http://127.0.0.1:9933",
       chainId: 1281,
       accounts: {
         mnemonic: mnemonic(),
       },
-    }
+    },
   },
   solidity: {
     compilers: [
@@ -614,3 +615,36 @@ task("send", "Send ETH")
 
     return send(fromSigner, txRequest);
   });
+
+task("docgen", "Generate NatSpec", async (taskArgs, hre) => {
+  const config = hre.config.docgen || {
+    ignore: ["console", "@openzeppelin", "YourContract"],
+    path: ["..", "web", "contracts"],
+    prettify: true,
+  };
+  const contractNames = await hre.artifacts.getAllFullyQualifiedNames();
+  await Promise.all(
+    contractNames
+      .filter(
+        (contractName) =>
+          !(config.ignore || []).some((name) => contractName.includes(name))
+      )
+      .map(async (contractName) => {
+        const [source, name] = contractName.split(":");
+        const { metadata } = (await hre.artifacts.getBuildInfo(contractName))
+          .output.contracts[source][name];
+
+        const { abi, devdoc, userdoc } = JSON.parse(metadata).output;
+
+        fs.writeFileSync(
+          path.resolve(__dirname, ...config.path, `${name}.json`),
+          JSON.stringify(
+            { name, abi, devdoc, userdoc },
+            null,
+            config.prettify ? 2 : 0
+          )
+        );
+        return { name, abi, devdoc, userdoc };
+      })
+  );
+});
