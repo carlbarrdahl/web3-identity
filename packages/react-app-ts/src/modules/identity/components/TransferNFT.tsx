@@ -1,12 +1,14 @@
-import { Button, HStack, Select } from "@chakra-ui/react";
+import { Box, Button, HStack } from "@chakra-ui/react";
+import { useState } from "react";
+import { useAccount } from "wagmi";
+import { Select } from "chakra-react-select";
 import {
   useTransferNFT,
   useApproveNFT,
   useGetApprovedNFT,
 } from "modules/identity/hooks/useIdentity";
 import { useNFTs } from "modules/identity/hooks/useNFTs";
-import { useState } from "react";
-import { useAccount } from "wagmi";
+import { selectStyles } from "../utils/selectStyles";
 
 const BUTTON_WIDTH = 150;
 
@@ -42,20 +44,18 @@ export default function TransferNFT({ address }: { address: string }) {
   console.log("NFT", data);
   return (
     <HStack>
-      <Select
-        placeholder="Select NFT to transfer"
-        value={selected}
-        onChange={(e) => select(e.target.value)}
-      >
-        {
-          // @ts-ignore
-          data.map((nft) => (
-            <option key={nft.title} value={`${nft.address}:${nft.id}`}>
-              {nft.title}
-            </option>
-          ))
-        }
-      </Select>
+      <Box flex={1}>
+        <Select
+          chakraStyles={selectStyles}
+          placeholder="Select NFT to transfer"
+          value={selected}
+          onChange={(e) => select(e.value)}
+          options={data.map((nft) => ({
+            label: nft.title,
+            value: `${nft.address}:${nft.id}`,
+          }))}
+        />
+      </Box>
       {selected ? (
         <TransferNftButton
           account={account.data?.address}

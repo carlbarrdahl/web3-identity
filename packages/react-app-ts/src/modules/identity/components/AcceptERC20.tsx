@@ -18,6 +18,7 @@ import {
   useAcceptedERC20s,
 } from "modules/identity/hooks/useIdentity";
 import { useAddressTokenSymbols } from "../hooks/useAddressTokenSymbol";
+import { selectStyles } from "../utils/selectStyles";
 
 const BUTTON_WIDTH = 150;
 
@@ -52,6 +53,7 @@ export default function AcceptERC20({ address }) {
       <HStack>
         <Box flex={1}>
           <CreatableSelect
+            chakraStyles={selectStyles}
             placeholder="Select ERC20 to accept"
             onChange={(e) => select(e.value)}
             options={tokens

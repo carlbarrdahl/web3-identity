@@ -23,6 +23,7 @@ import BorderedBox from "components/BorderedBox";
 import ErrorMessage from "components/ErrorMessage";
 import { useAcceptedERC20s } from "../hooks/useIdentity";
 import { useAddressTokenSymbols } from "../hooks/useAddressTokenSymbol";
+import { selectStyles } from "../utils/selectStyles";
 
 interface Props {
   to: string;
@@ -41,26 +42,12 @@ const TokenSelector = ({ control, name, id, ...props }) => {
       onBlur={onBlur}
       value={value}
       chakraStyles={{
+        ...selectStyles,
         container: (provided) => ({
           ...provided,
           position: "absolute",
           left: 1,
           width: 90,
-        }),
-        menu: (provided) => ({
-          ...provided,
-          bg: "white",
-          zIndex: 100,
-        }),
-        dropdownIndicator: (provided) => ({
-          ...provided,
-          bg: "transparent",
-          px: 2,
-          cursor: "inherit",
-        }),
-        indicatorSeparator: (provided) => ({
-          ...provided,
-          display: "none",
         }),
       }}
       {...props}
