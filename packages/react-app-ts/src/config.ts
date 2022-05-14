@@ -12,6 +12,10 @@ export const contractAddresses = {
     registry: "0xc48573c03d93c6acd5dca9e13616edfcd8c5f450",
     identity: "0xA5E0a2B348Ad64e5215Ed6C9dD026c814b78c6a8",
   },
+  10: {
+    registry: "0x499Fa72B33e6a191CA8F90ce24A0b6741fAD2FFC",
+    identity: "0xe22e52d958Dac23419023F04fCe26959aaDa25e3",
+  },
 };
 
 export const contractTypes = {

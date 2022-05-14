@@ -49,7 +49,7 @@ export default function TransferNFT({ address }: { address: string }) {
           chakraStyles={selectStyles}
           placeholder="Select NFT to transfer"
           value={selected}
-          onChange={(e) => select(e.value)}
+          onChange={(e) => select(e?.value)}
           options={
             // @ts-ignore
             data.map((nft) => ({

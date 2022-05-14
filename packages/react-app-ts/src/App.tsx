@@ -11,7 +11,7 @@ import IdentityCreate from "./pages/IdentityCreate";
 import IdentityView from "./pages/IdentityView";
 import NotFound from "./pages/NotFound";
 
-const chains = [chain.rinkeby, chain.hardhat];
+const chains = [chain.rinkeby, chain.hardhat, chain.optimism];
 const client = createClient({
   autoConnect: true,
   provider: ({ chainId }) => {
