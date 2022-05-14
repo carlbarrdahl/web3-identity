@@ -113,7 +113,6 @@ export function useTransferERC20(addressOrName) {
 }
 
 export function useContractWriteRefresh(contractConfig, method, eventName) {
-  console.log(method, contractConfig);
   const cache = useQueryClient();
 
   const contract = useContractWrite(contractConfig, method);

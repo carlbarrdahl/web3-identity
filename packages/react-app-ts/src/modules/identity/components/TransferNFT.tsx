@@ -41,7 +41,6 @@ export default function TransferNFT({ address }: { address: string }) {
 
   const [collection, tokenId] = selected.split(":");
 
-  console.log("NFT", data);
   return (
     <HStack>
       <Box flex={1}>
@@ -49,7 +48,7 @@ export default function TransferNFT({ address }: { address: string }) {
           chakraStyles={selectStyles}
           placeholder="Select NFT to transfer"
           value={selected}
-          onChange={(e) => select(e?.value)}
+          onChange={(e: any) => select(e?.value)}
           options={
             // @ts-ignore
             data.map((nft) => ({

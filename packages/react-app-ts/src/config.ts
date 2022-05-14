@@ -9,8 +9,8 @@ export const contractAddresses = {
     erc721: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
   },
   4: {
-    registry: "0xc48573c03d93c6acd5dca9e13616edfcd8c5f450",
-    identity: "0xA5E0a2B348Ad64e5215Ed6C9dD026c814b78c6a8",
+    registry: "0x7235B905fB7BfFF3d089EC0aACC384cA72a7088A",
+    identity: "0x891d84Db39076Ec561Ac8AeA721AE943044C509f",
   },
   10: {
     registry: "0x499Fa72B33e6a191CA8F90ce24A0b6741fAD2FFC",

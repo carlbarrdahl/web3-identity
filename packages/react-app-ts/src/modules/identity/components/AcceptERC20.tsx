@@ -55,10 +55,15 @@ export default function AcceptERC20({ address }) {
           <CreatableSelect
             chakraStyles={selectStyles}
             placeholder="Select ERC20 to accept"
-            onChange={(e) => select(e?.value)}
-            options={tokens
-              .filter((token) => !(accepted.data || []).includes(token.address))
-              .map((token) => ({ value: token.address, label: token.symbol }))}
+            onChange={(e: any) => select(e?.value)}
+            options={
+              // @ts-ignore
+              (tokens.data || [])
+                .filter(
+                  (token) => !(accepted.data || []).includes(token.address)
+                )
+                .map((token) => ({ value: token.address, label: token.symbol }))
+            }
           />
         </Box>
 

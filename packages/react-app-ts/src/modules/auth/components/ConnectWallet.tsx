@@ -6,7 +6,6 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
@@ -15,7 +14,6 @@ import { useAccount, useConnect, useDisconnect } from "wagmi";
 import Avatar from "boring-avatars";
 
 import { truncate } from "utils/truncate";
-import { InjectedConnector, chain } from "@wagmi/core";
 
 function ConnectedAccount({ address, onDisconnect }) {
   return (
@@ -48,7 +46,6 @@ export default function ConnectWallet() {
     );
   }
   const { address } = account || {};
-  console.log(address);
   return (
     <>
       {address ? (
