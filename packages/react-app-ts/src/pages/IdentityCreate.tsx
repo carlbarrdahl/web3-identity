@@ -7,6 +7,7 @@ import useCreate from "modules/identity/hooks/useCreate";
 import IdentityForm from "modules/identity/components/IdentityForm";
 import { Heading, Text } from "@chakra-ui/react";
 import BorderedBox from "components/BorderedBox";
+import ErrorMessage from "components/ErrorMessage";
 
 const IdentityCreate = ({}) => {
   const navigate = useNavigate();
@@ -23,11 +24,12 @@ const IdentityCreate = ({}) => {
           Add address and equity of all the owners of the identity contract.
         </Text>
 
+        <ErrorMessage error={create.error} />
+
         <IdentityForm
           account={account.data?.address}
-          isLoading={create.isLoading}
+          isLoading={create.isLoading || create.data}
           onCreate={(args) => {
-            console.log("create args", args);
             create.write({ args });
           }}
         />
